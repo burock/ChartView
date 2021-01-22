@@ -30,10 +30,17 @@ public struct LineChartView: View {
             
         }
     }
+    @State private var currentLabel: String = "" {
+        didSet{
+            if (oldValue != self.currentLabel && showIndicatorDot) {
+                HapticFeedback.playSelection()
+            }
+        }
+    }
     var frame = CGSize(width: 180, height: 120)
     private var rateValue: Int?
     
-    public init(data: [Double],
+    public init(data: ChartData,
                 title: String,
                 legend: String? = nil,
                 style: ChartStyle = Styles.lineChartStyleOne,
@@ -42,7 +49,7 @@ public struct LineChartView: View {
                 dropShadow: Bool? = true,
                 valueSpecifier: String? = "%.1f") {
         
-        self.data = ChartData(points: data)
+        self.data = data
         self.title = title
         self.legend = legend
         self.style = style
@@ -92,8 +99,11 @@ public struct LineChartView: View {
                     HStack{
                         Spacer()
                         Text("\(self.currentValue, specifier: self.valueSpecifier)")
-                            .font(.system(size: 41, weight: .bold, design: .default))
+                            .font(.subheadline)
                             .offset(x: 0, y: 30)
+                        
+                        Text(self.currentLabel).font(.subheadline).foregroundColor(.gray)
+                        
                         Spacer()
                     }
                     .transition(.scale)
@@ -133,6 +143,7 @@ public struct LineChartView: View {
         let index:Int = Int(round((toPoint.x)/stepWidth))
         if (index >= 0 && index < points.count){
             self.currentValue = points[index]
+            self.currentLabel = self.data.points[index].0
             return CGPoint(x: CGFloat(index)*stepWidth, y: CGFloat(points[index])*stepHeight)
         }
         return .zero
@@ -142,11 +153,11 @@ public struct LineChartView: View {
 struct WidgetView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            LineChartView(data: [8,23,54,32,12,37,7,23,43], title: "Line chart", legend: "Basic")
+            LineChartView(data: ChartData(points: [8,23]), title: "Line chart", legend: "Basic")
                 .environment(\.colorScheme, .light)
             
-            LineChartView(data: [282.502, 284.495, 283.51, 285.019, 285.197, 286.118, 288.737, 288.455, 289.391, 287.691, 285.878, 286.46, 286.252, 284.652, 284.129, 284.188], title: "Line chart", legend: "Basic")
-            .environment(\.colorScheme, .light)
+//            LineChartView(data: [282.502, 284.495, 283.51, 285.019, 285.197, 286.118, 288.737, 288.455, 289.391, 287.691, 285.878, 286.46, 286.252, 284.652, 284.129, 284.188], title: "Line chart", legend: "Basic")
+//            .environment(\.colorScheme, .light)
         }
     }
 }
