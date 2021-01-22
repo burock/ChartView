@@ -10,6 +10,7 @@ import SwiftUI
 public struct MultiLineChartView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     var data:[MultiLineChartData]
+    var labels: [String]
     public var title: String
     public var legend: String?
     public var style: ChartStyle
@@ -28,7 +29,23 @@ public struct MultiLineChartView: View {
             
         }
     }
-    
+    @State private var currentValue2: Double = 2 {
+        didSet{
+            if (oldValue != self.currentValue && showIndicatorDot) {
+                HapticFeedback.playSelection()
+            }
+            
+        }
+    }
+    @State private var currentLabel: String = "" {
+        didSet{
+            if (oldValue != self.currentLabel && showIndicatorDot) {
+                HapticFeedback.playSelection()
+            }
+            
+        }
+    }
+
     var globalMin:Double {
         if let min = data.flatMap({$0.onlyPoints()}).min() {
             return min
@@ -47,6 +64,7 @@ public struct MultiLineChartView: View {
     private var rateValue: Int?
     
     public init(data: [([Double], GradientColor)],
+                labels: [String],
                 title: String,
                 legend: String? = nil,
                 style: ChartStyle = Styles.lineChartStyleOne,
@@ -57,6 +75,7 @@ public struct MultiLineChartView: View {
         
         self.data = data.map({ MultiLineChartData(points: $0.0, gradient: $0.1)})
         self.title = title
+        self.labels = labels
         self.legend = legend
         self.style = style
         self.darkModeStyle = style.darkModeStyle != nil ? style.darkModeStyle! : Styles.lineViewDarkMode
@@ -101,7 +120,13 @@ public struct MultiLineChartView: View {
                     HStack{
                         Spacer()
                         Text("\(self.currentValue, specifier: self.valueSpecifier)")
-                            .font(.system(size: 41, weight: .bold, design: .default))
+                            .font(.subheadline).foregroundColor(self.data[0].getGradient().end)
+                            .offset(x: 0, y: 30)
+                        Text("\(self.currentValue2, specifier: self.valueSpecifier)")
+                            .font(.subheadline).foregroundColor(self.data[1].getGradient().end)
+                            .offset(x: 0, y: 30)
+                        Text("@\(self.currentLabel)").font(.subheadline)
+                            .foregroundColor(.gray)
                             .offset(x: 0, y: 30)
                         Spacer()
                     }
@@ -130,9 +155,9 @@ public struct MultiLineChartView: View {
         }
         .gesture(DragGesture()
         .onChanged({ value in
-//            self.touchLocation = value.location
-//            self.showIndicatorDot = true
-//            self.getClosestDataPoint(toPoint: value.location, width:self.frame.width, height: self.frame.height)
+            self.touchLocation = value.location
+            self.showIndicatorDot = true
+            self.getClosestDataPoint(toPoint: value.location, width:self.frame.width, height: self.frame.height)
         })
             .onEnded({ value in
                 self.showIndicatorDot = false
@@ -140,24 +165,31 @@ public struct MultiLineChartView: View {
         )
     }
     
-//    @discardableResult func getClosestDataPoint(toPoint: CGPoint, width:CGFloat, height: CGFloat) -> CGPoint {
-//        let points = self.data.onlyPoints()
-//        let stepWidth: CGFloat = width / CGFloat(points.count-1)
-//        let stepHeight: CGFloat = height / CGFloat(points.max()! + points.min()!)
-//
-//        let index:Int = Int(round((toPoint.x)/stepWidth))
-//        if (index >= 0 && index < points.count){
-//            self.currentValue = points[index]
-//            return CGPoint(x: CGFloat(index)*stepWidth, y: CGFloat(points[index])*stepHeight)
-//        }
-//        return .zero
-//    }
+    @discardableResult func getClosestDataPoint(toPoint: CGPoint, width:CGFloat, height: CGFloat) -> CGPoint {
+        let points = self.data[0].onlyPoints()
+        let points2 = self.data[1].onlyPoints()
+
+        let stepWidth: CGFloat = width / CGFloat(points.count-1)
+        let stepHeight: CGFloat = height / CGFloat(points.max()! + points.min()!)
+
+        let index:Int = Int(round((toPoint.x)/stepWidth))
+        if (index >= 0 && index < points.count){
+            self.currentValue = points[index]
+            self.currentValue2 = points2[index]
+            self.currentLabel = self.labels[index]
+
+            return CGPoint(x: CGFloat(index)*stepWidth, y: CGFloat(points[index])*stepHeight)
+        }
+        return .zero
+    }
 }
 
 struct MultiWidgetView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            MultiLineChartView(data: [([8,23,54,32,12,37,7,23,43], GradientColors.orange)], title: "Line chart", legend: "Basic")
+            MultiLineChartView(data: [([8,23,54,32,12,37,7,23,43], GradientColors.orange)], labels: 
+            [""]
+, title: "Line chart", legend: "Basic")
                 .environment(\.colorScheme, .light)
         }
     }

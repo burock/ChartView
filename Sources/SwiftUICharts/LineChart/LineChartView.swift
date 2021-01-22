@@ -102,8 +102,9 @@ public struct LineChartView: View {
                             .font(.headline)
                             .offset(x: 0, y: 30)
                         
-                        Text(self.currentLabel).font(.subheadline).foregroundColor(.gray)
-                        
+                        Text("@\(self.currentLabel)").font(.subheadline)
+                            .foregroundColor(.gray)
+                            .offset(x: 0, y: 30)
                         Spacer()
                     }
                     .transition(.scale)
