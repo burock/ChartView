@@ -99,7 +99,7 @@ public struct LineChartView: View {
                     HStack{
                         Spacer()
                         Text("\(self.currentValue, specifier: self.valueSpecifier)")
-                            .font(.subheadline)
+                            .font(.headline)
                             .offset(x: 0, y: 30)
                         
                         Text(self.currentLabel).font(.subheadline).foregroundColor(.gray)
