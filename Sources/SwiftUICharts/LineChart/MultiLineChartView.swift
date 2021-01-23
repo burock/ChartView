@@ -93,25 +93,28 @@ public struct MultiLineChartView: View {
     }
     
     public var body: some View {
-        ZStack(alignment: .center){
+        ZStack(alignment: .top){
             RoundedRectangle(cornerRadius: 10)
                 .fill(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
                 .frame(width: frame.width, height: 240, alignment: .center)
                 .shadow(radius: self.dropShadow ? 8 : 0)
-            VStack(alignment: .leading){
-                HStack{
-                    Text("\(names?[0] ?? "") \(self.currentValue, specifier: self.valueSpecifier)")
-                        .font(.subheadline).foregroundColor(self.data[0].getGradient().end)
-                    //.offset(x: 0, y: 30)
-                    Text("\(names?[1] ?? "") \(self.currentValue2, specifier: self.valueSpecifier)")
-                        .font(.subheadline).foregroundColor(self.data[1].getGradient().end)
-                    //.offset(x: 0, y: 30)
-                    Text("@\(self.currentLabel)").font(.subheadline)
-                        .foregroundColor(.gray)
-                    //.offset(x: 0, y: 30)
-                    Spacer()
+            VStack(alignment: .center){
+                if(!self.showIndicatorDot){
+                    HStack{
+                        Spacer()
+                        Text("\(names?[0] ?? "") \(self.currentValue, specifier: self.valueSpecifier)")
+                            .font(.subheadline).foregroundColor(self.data[0].getGradient().end)
+                        .offset(x: 0, y: 10)
+                        Text("\(names?[1] ?? "") \(self.currentValue2, specifier: self.valueSpecifier)")
+                            .font(.subheadline).foregroundColor(self.data[1].getGradient().end)
+                        .offset(x: 0, y: 10)
+                        Text("@\(self.currentLabel)").font(.subheadline)
+                            .foregroundColor(.gray)
+                        .offset(x: 0, y: 10)
+                        Spacer()
+                    }
+                    .transition(.scale)
                 }
-                .transition(.scale)
                 GeometryReader{ geometry in
                     ZStack{
                         ForEach(0..<self.data.count) { i in
