@@ -16,6 +16,7 @@ public struct MultiLineChartView: View {
     public var names: [String]?
     public var showBackground: [Bool]?
     public var opacity: [Double]?
+    public var fillGradient: Gradient?
     public var style: ChartStyle
     public var darkModeStyle: ChartStyle
     public var formSize: CGSize
@@ -77,6 +78,7 @@ public struct MultiLineChartView: View {
                 dropShadow: Bool = true,
                 showBackground: [Bool] = [false, false],
                 opacity: [Double] = [1.0, 1.0],
+                fillGradient: Gradient?,
                 valueSpecifier: String = "%.1f") {
         
         self.data = data.map({ MultiLineChartData(points: $0.0, gradient: $0.1)})
@@ -101,22 +103,6 @@ public struct MultiLineChartView: View {
                 .frame(width: frame.width, height: 240, alignment: .center)
                 .shadow(radius: self.dropShadow ? 8 : 0)
             VStack(alignment: .center){
-                if(self.showIndicatorDot){
-                    HStack{
-                        Spacer()
-                        Text("\(names?[0] ?? "") \(self.currentValue, specifier: self.valueSpecifier)")
-                            .font(.subheadline).foregroundColor(self.data[0].getGradient().end)
-                        .offset(x: 0, y: 10)
-                        Text("\(names?[1] ?? "") \(self.currentValue2, specifier: self.valueSpecifier)")
-                            .font(.subheadline).foregroundColor(self.data[1].getGradient().end)
-                        .offset(x: 0, y: 10)
-                        Text("@\(self.currentLabel)").font(.subheadline)
-                            .foregroundColor(.gray)
-                        .offset(x: 0, y: 10)
-                        Spacer()
-                    }
-                    .transition(.scale)
-                }
                 GeometryReader{ geometry in
                     ZStack{
                         ForEach(0..<self.data.count) { i in
@@ -127,6 +113,7 @@ public struct MultiLineChartView: View {
                                  minDataValue: .constant(self.globalMin(i)),
                                  maxDataValue: .constant(self.globalMax(i)),
                                  showBackground: showBackground?[i] ?? false,
+                                 fillGradient: fillGradient,
                                  gradient: self.data[i].getGradient(),
                                  index: i).opacity(self.opacity?[i] ?? 0.8)
                         }
@@ -135,6 +122,23 @@ public struct MultiLineChartView: View {
                 .frame(width: frame.width, height: frame.height + 50)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .offset(x: 0, y: 0)
+                if(self.showIndicatorDot){
+                    HStack{
+                        Spacer()
+                        Text("\(names?[0] ?? "") \(self.currentValue, specifier: self.valueSpecifier)")
+                            .font(.subheadline).foregroundColor(self.data[0].getGradient().end)
+                        .offset(x: 0, y: 30)
+                        Text("\(names?[1] ?? "") \(self.currentValue2, specifier: self.valueSpecifier)")
+                            .font(.subheadline).foregroundColor(self.data[1].getGradient().end)
+                        .offset(x: 0, y: 30)
+                        Text("@\(self.currentLabel)").font(.subheadline)
+                            .foregroundColor(.gray)
+                        .offset(x: 0, y: 30)
+                        Spacer()
+                    }
+                    .transition(.scale)
+                }
+
             }.frame(width: self.formSize.width, height: self.formSize.height)
         }
         .gesture(DragGesture()
@@ -173,7 +177,7 @@ struct MultiWidgetView_Previews: PreviewProvider {
         Group {
             MultiLineChartView(data: [([8,23,54,32,12,37,7,23,43], GradientColors.orange)], labels: 
                                 [""], names: []
-                               , title: "Line chart", legend: "Basic")
+                               , title: "Line chart", legend: "Basic", fillGradient: nil)
                 .environment(\.colorScheme, .light)
         }
     }
