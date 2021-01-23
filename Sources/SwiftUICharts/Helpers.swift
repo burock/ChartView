@@ -20,7 +20,7 @@ public struct Colors {
     public static let GrayStart:Color = .gray
     public static let GrayEnd:Color = .primary
     public static let PrimaryStart:Color = .primary
-    public static let SecondaryEnd:Color = .secondary
+    public static let SecondaryEnd:Color = .accentColor
 
 
     public static let LegendText:Color = Color(hexString: "#A7A6A8")
