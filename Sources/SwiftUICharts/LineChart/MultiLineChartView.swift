@@ -109,13 +109,13 @@ public struct MultiLineChartView: View {
                         Spacer()
                         Text("\(names?[0] ?? "") \(self.currentValue, specifier: self.valueSpecifier)")
                             .font(.subheadline).foregroundColor(self.data[0].getGradient().end)
-                        .offset(x: 0, y: 30)
+                        .offset(x: 0, y: 10)
                         Text("\(names?[1] ?? "") \(self.currentValue2, specifier: self.valueSpecifier)")
                             .font(.subheadline).foregroundColor(self.data[1].getGradient().end)
-                        .offset(x: 0, y: 30)
+                        .offset(x: 0, y: 10)
                         Text("@\(self.currentLabel)").font(.subheadline)
                             .foregroundColor(.gray)
-                        .offset(x: 0, y: 30)
+                        .offset(x: 0, y: 10)
                         Spacer()
                     }
                     .transition(.scale)
@@ -123,9 +123,13 @@ public struct MultiLineChartView: View {
 
                 GeometryReader{ geometry in
                     ZStack{
+                      GeometryReader{ reader in
+                        Rectangle()
+                                .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
                         ForEach(0..<self.data.count) { i in
                             Line(data: self.data[i],
-                                 frame: .constant(geometry.frame(in: .local)),
+                                 //frame: .constant(geometry.frame(in: .local)),
+                                 frame: .constant(CGRect(x: 0, y: 0, width: reader.frame(in: .local).width - 30, height: reader.frame(in: .local).height)),
                                  touchLocation: self.$touchLocation,
                                  showIndicator: self.$showIndicatorDot,
                                  minDataValue: .constant(self.globalMin(i)),
@@ -135,6 +139,7 @@ public struct MultiLineChartView: View {
                                  gradient: self.data[i].getGradient(),
                                  index: i).opacity(self.opacity?[i] ?? 0.8)
                         }
+                      }
                     }
                 }
                 .frame(width: frame.width, height: frame.height + 30)
