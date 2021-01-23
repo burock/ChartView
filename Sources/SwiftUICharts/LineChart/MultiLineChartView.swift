@@ -121,7 +121,7 @@ public struct MultiLineChartView: View {
                                  showIndicator: self.$showIndicatorDot,
                                  minDataValue: .constant(self.globalMin(i)),
                                  maxDataValue: .constant(self.globalMax(i)),
-                                 showBackground: showBackground[i],
+                                 showBackground: showBackground?[i] ?? false,
                                  gradient: self.data[i].getGradient(),
                                  index: i)
                         }
