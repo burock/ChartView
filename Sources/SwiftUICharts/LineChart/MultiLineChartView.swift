@@ -15,6 +15,7 @@ public struct MultiLineChartView: View {
     public var legend: String?
     public var names: [String]?
     public var showBackground: [Bool]?
+    public var opacity: [Double]?
     public var style: ChartStyle
     public var darkModeStyle: ChartStyle
     public var formSize: CGSize
@@ -75,6 +76,7 @@ public struct MultiLineChartView: View {
                 rateValue: Int? = nil,
                 dropShadow: Bool = true,
                 showBackground: [Bool] = [false, false],
+                opacity: [Double] = [1.0, 1.0],
                 valueSpecifier: String = "%.1f") {
         
         self.data = data.map({ MultiLineChartData(points: $0.0, gradient: $0.1)})
@@ -99,7 +101,7 @@ public struct MultiLineChartView: View {
                 .frame(width: frame.width, height: 240, alignment: .center)
                 .shadow(radius: self.dropShadow ? 8 : 0)
             VStack(alignment: .center){
-                if(!self.showIndicatorDot){
+                if(self.showIndicatorDot){
                     HStack{
                         Spacer()
                         Text("\(names?[0] ?? "") \(self.currentValue, specifier: self.valueSpecifier)")
@@ -126,13 +128,13 @@ public struct MultiLineChartView: View {
                                  maxDataValue: .constant(self.globalMax(i)),
                                  showBackground: showBackground?[i] ?? false,
                                  gradient: self.data[i].getGradient(),
-                                 index: i)
+                                 index: i).opacity(self.opacity?[i] ?? 0.8)
                         }
                     }
                 }
-                .frame(width: frame.width, height: frame.height + 15)
+                .frame(width: frame.width, height: frame.height + 50)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
-                //.offset(x: 0, y: 0)
+                .offset(x: 0, y: 0)
             }.frame(width: self.formSize.width, height: self.formSize.height)
         }
         .gesture(DragGesture()
