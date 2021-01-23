@@ -87,6 +87,7 @@ public struct MultiLineChartView: View {
         self.showBackground = showBackground
         self.names = names
         self.legend = legend
+        self.fillGradient = fillGradient
         self.style = style
         self.darkModeStyle = style.darkModeStyle != nil ? style.darkModeStyle! : Styles.lineViewDarkMode
         self.formSize = form
@@ -103,25 +104,6 @@ public struct MultiLineChartView: View {
                 .frame(width: frame.width, height: 240, alignment: .center)
                 .shadow(radius: self.dropShadow ? 8 : 0)
             VStack(alignment: .center){
-                GeometryReader{ geometry in
-                    ZStack{
-                        ForEach(0..<self.data.count) { i in
-                            Line(data: self.data[i],
-                                 frame: .constant(geometry.frame(in: .local)),
-                                 touchLocation: self.$touchLocation,
-                                 showIndicator: self.$showIndicatorDot,
-                                 minDataValue: .constant(self.globalMin(i)),
-                                 maxDataValue: .constant(self.globalMax(i)),
-                                 showBackground: showBackground?[i] ?? false,
-                                 fillGradient: fillGradient,
-                                 gradient: self.data[i].getGradient(),
-                                 index: i).opacity(self.opacity?[i] ?? 0.8)
-                        }
-                    }
-                }
-                .frame(width: frame.width, height: frame.height + 50)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .offset(x: 0, y: 0)
                 if(self.showIndicatorDot){
                     HStack{
                         Spacer()
@@ -139,6 +121,26 @@ public struct MultiLineChartView: View {
                     .transition(.scale)
                 }
 
+                GeometryReader{ geometry in
+                    ZStack{
+                        ForEach(0..<self.data.count) { i in
+                            Line(data: self.data[i],
+                                 frame: .constant(geometry.frame(in: .local)),
+                                 touchLocation: self.$touchLocation,
+                                 showIndicator: self.$showIndicatorDot,
+                                 minDataValue: .constant(self.globalMin(i)),
+                                 maxDataValue: .constant(self.globalMax(i)),
+                                 showBackground: showBackground?[i] ?? false,
+                                 fillGradient: fillGradient,
+                                 gradient: self.data[i].getGradient(),
+                                 index: i).opacity(self.opacity?[i] ?? 0.8)
+                        }
+                    }
+                }
+                .frame(width: frame.width, height: frame.height + 30)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .offset(x: 0, y: 0)
+ 
             }.frame(width: self.formSize.width, height: self.formSize.height)
         }
         .gesture(DragGesture()
