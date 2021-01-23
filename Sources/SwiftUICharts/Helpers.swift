@@ -17,6 +17,9 @@ public struct Colors {
     public static let color3Accent:Color = Color(hexString: "#E1614C")
     public static let OrangeEnd:Color = Color(hexString: "#FF782C")
     public static let OrangeStart:Color = Color(hexString: "#EC2301")
+    public static let GrayStart:Color = .gray
+    public static let GrayEnd:Color = .secondary
+
     public static let LegendText:Color = Color(hexString: "#A7A6A8")
     public static let LegendColor:Color = Color(hexString: "#E8E7EA")
     public static let LegendDarkColor:Color = Color(hexString: "#545454")
@@ -46,6 +49,7 @@ public struct GradientColor {
 
 public struct GradientColors {
     public static let orange = GradientColor(start: Colors.OrangeStart, end: Colors.OrangeEnd)
+    public static let gray = GradientColor(start: Colors.GrayStart, end: Colors.GrayEnd)
     public static let blue = GradientColor(start: Colors.GradientPurple, end: Colors.GradientNeonBlue)
     public static let green = GradientColor(start: Color(hexString: "0BCDF7"), end: Color(hexString: "A2FEAE"))
     public static let blu = GradientColor(start: Color(hexString: "0591FF"), end: Color(hexString: "29D9FE"))

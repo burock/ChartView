@@ -91,7 +91,7 @@ public struct MultiLineChartView: View {
     
     public var body: some View {
         ZStack(alignment: .center){
-            RoundedRectangle(cornerRadius: 20)
+            RoundedRectangle(cornerRadius: 10)
                 .fill(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
                 .frame(width: frame.width, height: 240, alignment: .center)
                 .shadow(radius: self.dropShadow ? 8 : 0)
@@ -109,16 +109,16 @@ public struct MultiLineChartView: View {
                                 .font(.callout)
                                 .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor : self.style.legendTextColor)
                         }
-                        if (self.rateValue != nil || self.rateValue != 0){
-                            HStack {
-                                if (rateValue ?? 0 >= 0){
-                                    Image(systemName: "arrow.up")
-                                }else{
-                                    Image(systemName: "arrow.down")
-                                }
-                                Text("\(rateValue ?? 0)%")
-                            }
-                        }
+//                        if (self.rateValue != nil || self.rateValue != 0){
+//                            HStack {
+//                                if (rateValue ?? 0 >= 0){
+//                                    Image(systemName: "arrow.up")
+//                                }else{
+//                                    Image(systemName: "arrow.down")
+//                                }
+//                                Text("\(rateValue ?? 0)%")
+//                            }
+//                        }
                     }
                     .transition(.opacity)
                     .animation(.easeIn(duration: 0.1))
@@ -155,8 +155,8 @@ public struct MultiLineChartView: View {
                         }
                     }
                 }
-                .frame(width: frame.width, height: frame.height + 30)
-                .clipShape(RoundedRectangle(cornerRadius: 20))
+                .frame(width: frame.width, height: frame.height + 15)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
                 .offset(x: 0, y: 0)
             }.frame(width: self.formSize.width, height: self.formSize.height)
         }
