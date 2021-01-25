@@ -56,14 +56,14 @@ public struct MultiLineChartView: View {
     
     func globalMin(_ i :Int) -> Double {
         if let min = self.data[i].onlyPoints().compactMap({$0}).min() {
-            return (min - min * 0.10)
+            return (min - min * 0.02)
         }
         return 0
     }
     
     func globalMax(_ i:Int) -> Double {
         if let max = self.data[i].onlyPoints().compactMap({$0}).max() {
-            return (max + max * 0.10)
+            return (max + max * 0.02)
         }
         return 0
     }
@@ -90,7 +90,7 @@ public struct MultiLineChartView: View {
         
         self.data = data.map({ MultiLineChartData(points: $0.0, gradient: $0.1)})
         let avg = self.data[0].onlyPoints().reduce(0, +) / Double(self.data[0].onlyPoints().count)
-        dataZero = [Double](repeating: avg, count: self.data[0].onlyPoints().count)
+        self.dataZero = [Double](repeating: avg, count: self.data[0].onlyPoints().count)
         self.displayZero = displayZero
         self.title = title
         self.labels = labels
@@ -173,8 +173,7 @@ public struct MultiLineChartView: View {
                             }
                             if displayZero ?? false {
                                 Line(data: ChartData(points: dataZero ?? [0]),
-                                     //frame: .constant(geometry.frame(in: .local)),
-                                     frame: .constant(CGRect(x: 0, y: 0, width: reader.frame(in: .local).width - 30, height: reader.frame(in: .local).height)),
+                                     frame: .constant(geometry.frame(in: .local)),
                                      touchLocation: self.$touchLocation,
                                      showIndicator: self.$showIndicatorDot,
                                      minDataValue: .constant(self.globalMin(0)),
