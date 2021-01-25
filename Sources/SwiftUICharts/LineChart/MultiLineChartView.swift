@@ -161,7 +161,7 @@ public struct MultiLineChartView: View {
                                     BarChartRow(data: self.data[i].onlyPoints(),
                                                 accentColor: self.colorScheme == .dark ? self.darkModeStyle.accentColor : self.style.accentColor,
                                                 gradient: self.colorScheme == .dark ? self.darkModeStyle.gradientColor : self.style.gradientColor,
-                                                touchLocation: $touchLocation.y).opacity(self.opacity?[i] ?? 0.8)
+                                                touchLocation: $touchLocation.x).opacity(self.opacity?[i] ?? 0.8)
                                 }
                             }
                         }
