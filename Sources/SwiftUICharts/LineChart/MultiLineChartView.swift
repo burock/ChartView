@@ -55,14 +55,14 @@ public struct MultiLineChartView: View {
     
     func globalMin(_ i :Int) -> Double {
         if let min = self.data[i].onlyPoints().compactMap({$0}).min() {
-            return (min - min * 0.02)
+            return (min - min * 0.005)
         }
         return 0
     }
     
     func globalMax(_ i:Int) -> Double {
         if let max = self.data[i].onlyPoints().compactMap({$0}).max() {
-            return (max + max * 0.02)
+            return (max + max * 0.005)
         }
         return 0
     }
@@ -153,7 +153,7 @@ public struct MultiLineChartView: View {
                                          frame: .constant(CGRect(x: 0, y: 0, width: reader.frame(in: .local).width - 30, height: reader.frame(in: .local).height)),
                                          touchLocation: self.$touchLocation,
                                          showIndicator: self.$showIndicatorDot,
-                                         minDataValue: .constant(i > 1 ? self.globalMin(0) : self.globalMin(i)),
+                                         minDataValue: .constant(self.globalMin(i)),
                                          maxDataValue: .constant(self.globalMax(i)),
                                          showBackground: showBackground?[i] ?? false,
                                          fillGradient: fillGradient,
@@ -173,7 +173,7 @@ public struct MultiLineChartView: View {
                                      frame: .constant(geometry.frame(in: .local)),
                                      touchLocation: self.$touchLocation,
                                      showIndicator: self.$showIndicatorDot,
-                                     minDataValue: .constant(2 * self.globalMin(0)),
+                                     minDataValue: .constant(self.globalMin(0)),
                                      maxDataValue: .constant(self.globalMax(0)),
                                      showBackground: false,
                                      fillGradient: fillGradient,

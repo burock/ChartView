@@ -43,7 +43,7 @@ public struct Line: View {
         }else {
             return 0
         }
-        if let min = min, let max = max, min != max {
+        if let min = min, let max = max { //, min != max
             if (min <= 0){
                 return (frame.size.height-padding) / CGFloat(max - min)
             }else{
