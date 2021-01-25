@@ -143,7 +143,8 @@ public struct MultiLineChartView: View {
                         Rectangle()
                                 .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
                         ForEach(0..<self.data.count) { i in
-                            Line(data: self.data[i],
+                            if i==0 {
+                                Line(data: self.data[i],
                                  //frame: .constant(geometry.frame(in: .local)),
                                  frame: .constant(CGRect(x: 0, y: 0, width: reader.frame(in: .local).width - 30, height: reader.frame(in: .local).height)),
                                  touchLocation: self.$touchLocation,
@@ -156,6 +157,12 @@ public struct MultiLineChartView: View {
                                  lineWidth: lineWidth[i],
                                  gradient: self.data[i].getGradient(),
                                  index: i).opacity(self.opacity?[i] ?? 0.8)
+                            } else {
+                                BarChartRow(data: self.data[i].onlyPoints(),
+                                            accentColor: self.colorScheme == .dark ? self.darkModeStyle.accentColor : self.style.accentColor,
+                                            gradient: self.colorScheme == .dark ? self.darkModeStyle.gradientColor : self.style.gradientColor,
+                                            touchLocation: $touchLocation.y)
+                            }
                         }
                       }
                     }
