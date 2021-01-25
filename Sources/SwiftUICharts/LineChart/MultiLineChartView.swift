@@ -110,16 +110,16 @@ public struct MultiLineChartView: View {
                 .fill(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
                 .frame(width: frame.width, height: 240, alignment: .center)
                 .shadow(radius: self.dropShadow ? 8 : 0)
-            VStack(alignment: .center){
+            VStack(alignment: .leading){
                 if(!self.showIndicatorDot){
                     VStack(alignment: .leading, spacing: 8){
                         Text(self.title ?? "")
-                            .font(.title)
+                            .font(.body)
                             .bold()
-                            .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
+                            .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : Color.gray)
                     }
                     .transition(.opacity)
-                    .animation(.easeIn(duration: 0.1))
+                    .animation(.easeIn(duration: 0.3))
                     .padding([.leading, .top])
                 }else{
                     HStack{
@@ -144,7 +144,7 @@ public struct MultiLineChartView: View {
                             Rectangle()
                                 .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
                             ForEach(0..<self.data.count) { i in
-                                if i>0 {
+                                if i>0 && lineWidth[i] > 0 {
                                     Line(data: self.data[i],
                                          //frame: .constant(geometry.frame(in: .local)),
                                          frame: .constant(CGRect(x: 0, y: 0, width: reader.frame(in: .local).width - 30, height: reader.frame(in: .local).height)),
