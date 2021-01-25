@@ -179,7 +179,7 @@ public struct MultiLineChartView: View {
                                      fillGradient: fillGradient,
                                      curvedLines: false,
                                      lineWidth: 1,
-                                     gradient: self.data[0].getGradient(),
+                                     gradient: GradientColors.orange,//self.data[0].getGradient(),
                                      index: 0).opacity(self.opacity?[0] ?? 0.8)
                             }
                         }
