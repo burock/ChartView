@@ -10,7 +10,6 @@ import SwiftUI
 public struct MultiLineChartView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     var data:[MultiLineChartData]
-    var dataZero: [Double]?
     var labels: [String]
     public var title: String?
     public var legend: String?
@@ -89,8 +88,6 @@ public struct MultiLineChartView: View {
                 valueSpecifier: String = "%.1f") {
         
         self.data = data.map({ MultiLineChartData(points: $0.0, gradient: $0.1)})
-        let avg = self.data[0].onlyPoints().reduce(0, +) / Double(self.data[0].onlyPoints().count)
-        self.dataZero = [Double](repeating: avg, count: self.data[0].onlyPoints().count)
         self.displayZero = displayZero
         self.title = title
         self.labels = labels
@@ -172,7 +169,7 @@ public struct MultiLineChartView: View {
                                 }
                             }
                             if displayZero ?? false {
-                                Line(data: ChartData(points: dataZero ?? [0]),
+                                Line(data: ChartData(points: [Double](repeating: abs(globalMin(0)), count: self.data[0].onlyPoints().count) ),
                                      frame: .constant(geometry.frame(in: .local)),
                                      touchLocation: self.$touchLocation,
                                      showIndicator: self.$showIndicatorDot,
