@@ -10,6 +10,7 @@ import SwiftUI
 public struct MultiLineChartView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     var data:[MultiLineChartData]
+    var dataZero: [Double]?
     var labels: [String]
     public var title: String?
     public var legend: String?
@@ -24,6 +25,7 @@ public struct MultiLineChartView: View {
     public var valueSpecifier:String
     public var curvedLines: [Bool]
     public var lineWidth: [Int]
+    public var displayZero: Bool? = false
     
     @State private var touchLocation:CGPoint = .zero
     @State private var showIndicatorDot: Bool = false
@@ -54,14 +56,14 @@ public struct MultiLineChartView: View {
     
     func globalMin(_ i :Int) -> Double {
         if let min = self.data[i].onlyPoints().compactMap({$0}).min() {
-            return (min - min * 0.20)
+            return (min - min * 0.10)
         }
         return 0
     }
     
     func globalMax(_ i:Int) -> Double {
         if let max = self.data[i].onlyPoints().compactMap({$0}).max() {
-            return (max + max * 0.20)
+            return (max + max * 0.10)
         }
         return 0
     }
@@ -83,9 +85,13 @@ public struct MultiLineChartView: View {
                 fillGradient: Gradient?,
                 curvedLines: [Bool] = [true,true],
                 lineWidth: [Int] = [3,3],
+                displayZero: Bool?,
                 valueSpecifier: String = "%.1f") {
         
         self.data = data.map({ MultiLineChartData(points: $0.0, gradient: $0.1)})
+        let avg = self.data[0].onlyPoints().reduce(0, +) / Double(self.data[0].onlyPoints().count)
+        dataZero = [Double](repeating: avg, count: self.data[0].onlyPoints().count)
+        self.displayZero = displayZero
         self.title = title
         self.labels = labels
         self.showBackground = showBackground
@@ -165,6 +171,21 @@ public struct MultiLineChartView: View {
                                                 touchLocation: $touchLocation.y).opacity(self.opacity?[i] ?? 0.8)
                                 }
                             }
+                            if displayZero ?? false {
+                                Line(data: ChartData(points: dataZero ?? [0]),
+                                     //frame: .constant(geometry.frame(in: .local)),
+                                     frame: .constant(CGRect(x: 0, y: 0, width: reader.frame(in: .local).width - 30, height: reader.frame(in: .local).height)),
+                                     touchLocation: self.$touchLocation,
+                                     showIndicator: self.$showIndicatorDot,
+                                     minDataValue: .constant(self.globalMin(0)),
+                                     maxDataValue: .constant(self.globalMax(0)),
+                                     showBackground: false,
+                                     fillGradient: fillGradient,
+                                     curvedLines: false,
+                                     lineWidth: 1,
+                                     gradient: self.data[0].getGradient(),
+                                     index: 0).opacity(self.opacity?[0] ?? 0.8)
+                            }
                         }
                     }
                 }
@@ -210,7 +231,7 @@ struct MultiWidgetView_Previews: PreviewProvider {
         Group {
             MultiLineChartView(data: [([8,23,54,32,12,37,7,23,43], GradientColors.orange)], labels: 
                                 [""], names: []
-                               , title: "Line chart", legend: "Basic", fillGradient: nil)
+                               , title: "Line chart", legend: "Basic", fillGradient: nil, displayZero: false)
                 .environment(\.colorScheme, .light)
         }
     }
