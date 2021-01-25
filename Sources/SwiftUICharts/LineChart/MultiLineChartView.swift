@@ -125,52 +125,52 @@ public struct MultiLineChartView: View {
                         Spacer()
                         Text("\(names?[0] ?? "") \(self.currentValue, specifier: self.valueSpecifier)")
                             .font(.subheadline).foregroundColor(self.data[0].getGradient().end)
-                        .offset(x: 0, y: 10)
+                            .offset(x: 0, y: 10)
                         Text("\(names?[1] ?? "") \(self.currentValue2, specifier: self.valueSpecifier)")
                             .font(.subheadline).foregroundColor(self.data[1].getGradient().end)
-                        .offset(x: 0, y: 10)
+                            .offset(x: 0, y: 10)
                         Text("@\(self.currentLabel)").font(.subheadline)
                             .foregroundColor(.gray)
-                        .offset(x: 0, y: 10)
+                            .offset(x: 0, y: 10)
                         Spacer()
                     }
                     .transition(.scale)
                 }
-
+                
                 GeometryReader{ geometry in
                     ZStack{
-                      GeometryReader{ reader in
-                        Rectangle()
+                        GeometryReader{ reader in
+                            Rectangle()
                                 .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
-                        ForEach(0..<self.data.count) { i in
-                            if i==0 {
-                                Line(data: self.data[i],
-                                 //frame: .constant(geometry.frame(in: .local)),
-                                 frame: .constant(CGRect(x: 0, y: 0, width: reader.frame(in: .local).width - 30, height: reader.frame(in: .local).height)),
-                                 touchLocation: self.$touchLocation,
-                                 showIndicator: self.$showIndicatorDot,
-                                 minDataValue: .constant(self.globalMin(i)),
-                                 maxDataValue: .constant(self.globalMax(i)),
-                                 showBackground: showBackground?[i] ?? false,
-                                 fillGradient: fillGradient,
-                                 curvedLines: curvedLines[i],
-                                 lineWidth: lineWidth[i],
-                                 gradient: self.data[i].getGradient(),
-                                 index: i).opacity(self.opacity?[i] ?? 0.8)
-                            } else {
-                                BarChartRow(data: self.data[i].onlyPoints(),
-                                            accentColor: self.colorScheme == .dark ? self.darkModeStyle.accentColor : self.style.accentColor,
-                                            gradient: self.colorScheme == .dark ? self.darkModeStyle.gradientColor : self.style.gradientColor,
-                                            touchLocation: $touchLocation.y)
+                            ForEach(0..<self.data.count) { i in
+                                if i==0 {
+                                    Line(data: self.data[i],
+                                         //frame: .constant(geometry.frame(in: .local)),
+                                         frame: .constant(CGRect(x: 0, y: 0, width: reader.frame(in: .local).width - 30, height: reader.frame(in: .local).height)),
+                                         touchLocation: self.$touchLocation,
+                                         showIndicator: self.$showIndicatorDot,
+                                         minDataValue: .constant(self.globalMin(i)),
+                                         maxDataValue: .constant(self.globalMax(i)),
+                                         showBackground: showBackground?[i] ?? false,
+                                         fillGradient: fillGradient,
+                                         curvedLines: curvedLines[i],
+                                         lineWidth: lineWidth[i],
+                                         gradient: self.data[i].getGradient(),
+                                         index: i).opacity(self.opacity?[i] ?? 0.8)
+                                } else {
+                                    BarChartRow(data: self.data[i].onlyPoints(),
+                                                accentColor: self.colorScheme == .dark ? self.darkModeStyle.accentColor : self.style.accentColor,
+                                                gradient: self.colorScheme == .dark ? self.darkModeStyle.gradientColor : self.style.gradientColor,
+                                                touchLocation: $touchLocation.y).opacity(self.opacity?[i] ?? 0.8)
+                                }
                             }
                         }
-                      }
                     }
                 }
                 .frame(width: frame.width, height: frame.height + 30)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .offset(x: 0, y: 0)
- 
+                
             }.frame(width: self.formSize.width, height: self.formSize.height)
         }
         .gesture(DragGesture()
