@@ -153,7 +153,7 @@ public struct MultiLineChartView: View {
                                          frame: .constant(CGRect(x: 0, y: 0, width: reader.frame(in: .local).width - 30, height: reader.frame(in: .local).height)),
                                          touchLocation: self.$touchLocation,
                                          showIndicator: self.$showIndicatorDot,
-                                         minDataValue: .constant(self.globalMin(i % 1)),
+                                         minDataValue: .constant(i > 1 ? self.globalMin(0) : self.globalMin(i)),
                                          maxDataValue: .constant(self.globalMax(i)),
                                          showBackground: showBackground?[i] ?? false,
                                          fillGradient: fillGradient,
@@ -169,11 +169,11 @@ public struct MultiLineChartView: View {
                                 }
                             }
                             if displayZero ?? false {
-                                Line(data: ChartData(points: [Double](repeating: abs(2 * globalMin(0)), count: self.data[0].onlyPoints().count) ),
+                                Line(data: ChartData(points: [Double](repeating: abs(globalMin(0)), count: self.data[0].onlyPoints().count) ),
                                      frame: .constant(geometry.frame(in: .local)),
                                      touchLocation: self.$touchLocation,
                                      showIndicator: self.$showIndicatorDot,
-                                     minDataValue: .constant(self.globalMin(0)),
+                                     minDataValue: .constant(2 * self.globalMin(0)),
                                      maxDataValue: .constant(self.globalMax(0)),
                                      showBackground: false,
                                      fillGradient: fillGradient,
