@@ -169,7 +169,7 @@ public struct MultiLineChartView: View {
                                 }
                             }
                             if displayZero ?? false {
-                                Line(data: ChartData(points: [Double](repeating: abs(globalMin(0)), count: self.data[0].onlyPoints().count) ),
+                                Line(data: ChartData(points: [Double](repeating: abs(2 * globalMin(0)), count: self.data[0].onlyPoints().count) ),
                                      frame: .constant(geometry.frame(in: .local)),
                                      touchLocation: self.$touchLocation,
                                      showIndicator: self.$showIndicatorDot,
