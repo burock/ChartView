@@ -144,7 +144,7 @@ public struct MultiLineChartView: View {
                             Rectangle()
                                 .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
                             ForEach(0..<self.data.count) { i in
-                                if i>0 && lineWidth[i] > 0 {
+                                if lineWidth[i] > 0 {
                                     Line(data: self.data[i],
                                          //frame: .constant(geometry.frame(in: .local)),
                                          frame: .constant(CGRect(x: 0, y: 0, width: reader.frame(in: .local).width - 30, height: reader.frame(in: .local).height)),
