@@ -54,14 +54,14 @@ public struct MultiLineChartView: View {
     
     func globalMin(_ i :Int) -> Double {
         if let min = self.data[i].onlyPoints().compactMap({$0}).min() {
-            return min
+            return (min - min * 0.20)
         }
         return 0
     }
     
     func globalMax(_ i:Int) -> Double {
         if let max = self.data[i].onlyPoints().compactMap({$0}).max() {
-            return max
+            return (max + max * 0.20)
         }
         return 0
     }
