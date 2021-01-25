@@ -22,6 +22,8 @@ public struct MultiLineChartView: View {
     public var formSize: CGSize
     public var dropShadow: Bool
     public var valueSpecifier:String
+    public var curvedLines: [Bool]
+    public var lineWidth: [Int]
     
     @State private var touchLocation:CGPoint = .zero
     @State private var showIndicatorDot: Bool = false
@@ -79,6 +81,8 @@ public struct MultiLineChartView: View {
                 showBackground: [Bool] = [false, false],
                 opacity: [Double] = [1.0, 1.0],
                 fillGradient: Gradient?,
+                curvedLines: [Bool] = [true,true],
+                lineWidth: [Int] = [3,3],
                 valueSpecifier: String = "%.1f") {
         
         self.data = data.map({ MultiLineChartData(points: $0.0, gradient: $0.1)})
@@ -95,6 +99,8 @@ public struct MultiLineChartView: View {
         self.rateValue = rateValue
         self.dropShadow = dropShadow
         self.valueSpecifier = valueSpecifier
+        self.curvedLines = curvedLines
+        self.lineWidth = lineWidth
     }
     
     public var body: some View {
@@ -104,7 +110,17 @@ public struct MultiLineChartView: View {
                 .frame(width: frame.width, height: 240, alignment: .center)
                 .shadow(radius: self.dropShadow ? 8 : 0)
             VStack(alignment: .center){
-                if(self.showIndicatorDot){
+                if(!self.showIndicatorDot){
+                    VStack(alignment: .leading, spacing: 8){
+                        Text(self.title ?? "")
+                            .font(.title)
+                            .bold()
+                            .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
+                    }
+                    .transition(.opacity)
+                    .animation(.easeIn(duration: 0.1))
+                    .padding([.leading, .top])
+                }else{
                     HStack{
                         Spacer()
                         Text("\(names?[0] ?? "") \(self.currentValue, specifier: self.valueSpecifier)")
@@ -136,6 +152,8 @@ public struct MultiLineChartView: View {
                                  maxDataValue: .constant(self.globalMax(i)),
                                  showBackground: showBackground?[i] ?? false,
                                  fillGradient: fillGradient,
+                                 curvedLines: curvedLines[i],
+                                 lineWidth: lineWidth[i],
                                  gradient: self.data[i].getGradient(),
                                  index: i).opacity(self.opacity?[i] ?? 0.8)
                         }
