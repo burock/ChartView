@@ -153,7 +153,7 @@ public struct MultiLineChartView: View {
                                          frame: .constant(CGRect(x: 0, y: 0, width: reader.frame(in: .local).width - 30, height: reader.frame(in: .local).height)),
                                          touchLocation: self.$touchLocation,
                                          showIndicator: self.$showIndicatorDot,
-                                         minDataValue: .constant(self.globalMin(i)),
+                                         minDataValue: .constant(self.globalMin(i % 1)),
                                          maxDataValue: .constant(self.globalMax(i)),
                                          showBackground: showBackground?[i] ?? false,
                                          fillGradient: fillGradient,
