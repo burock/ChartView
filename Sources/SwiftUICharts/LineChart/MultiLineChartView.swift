@@ -108,14 +108,13 @@ public struct MultiLineChartView: View {
         self.opacity = opacity
         let min = abs(globalMin(0))
         self.zeros = [Double](repeating: min, count: self.data[0].onlyPoints().count)
-        print(zeros?.description)
     }
     
     public var body: some View {
         ZStack(alignment: .top){
             RoundedRectangle(cornerRadius: 10)
                 .fill(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
-                .frame(width: frame.width, height: 240, alignment: .center)
+                .frame(width: frame.width, height: frame.height, alignment: .center)
                 .shadow(radius: self.dropShadow ? 8 : 0)
             VStack(alignment: .leading){
                 if(!self.showIndicatorDot){
