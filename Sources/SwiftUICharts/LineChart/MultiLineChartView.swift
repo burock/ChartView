@@ -114,7 +114,7 @@ public struct MultiLineChartView: View {
         ZStack(alignment: .top){
             RoundedRectangle(cornerRadius: 10)
                 .fill(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
-                .frame(width: frame.width, height: frame.height + 150, alignment: .center)
+                //.frame(width: frame.width, height: frame.height + 150, alignment: .center)
                 .shadow(radius: self.dropShadow ? 8 : 0)
             VStack(alignment: .leading){
                 if(!self.showIndicatorDot){
@@ -152,8 +152,7 @@ public struct MultiLineChartView: View {
                             ForEach(0..<self.data.count) { i in
                                 if lineWidth[i] > 0 {
                                     Line(data: self.data[i],
-                                         //frame: .constant(geometry.frame(in: .local)),
-                                         frame: .constant(CGRect(x: 0, y: 0, width: reader.frame(in: .local).width - 30, height: reader.frame(in: .local).height)),
+                                         frame: .constant(geometry.frame(in: .local)),
                                          touchLocation: self.$touchLocation,
                                          showIndicator: self.$showIndicatorDot,
                                          minDataValue: .constant(self.globalMin(i)),
@@ -183,7 +182,7 @@ public struct MultiLineChartView: View {
                                      curvedLines: false,
                                      lineWidth: 1,
                                      gradient: GradientColors.orange,//self.data[0].getGradient(),
-                                     index: 0).opacity(self.opacity?[0] ?? 0.8)
+                                     index: 1).opacity(self.opacity?[0] ?? 0.8)
                             }
                         }
                     }
