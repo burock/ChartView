@@ -25,6 +25,7 @@ public struct MultiLineChartView: View {
     public var curvedLines: [Bool]
     public var lineWidth: [Int]
     public var displayZero: Bool? = false
+    var zeros: [Double]?
     
     @State private var touchLocation:CGPoint = .zero
     @State private var showIndicatorDot: Bool = false
@@ -55,14 +56,14 @@ public struct MultiLineChartView: View {
     
     func globalMin(_ i :Int) -> Double {
         if let min = self.data[i].onlyPoints().compactMap({$0}).min() {
-            return (min - min * 0.005)
+            return min
         }
         return 0
     }
     
     func globalMax(_ i:Int) -> Double {
         if let max = self.data[i].onlyPoints().compactMap({$0}).max() {
-            return (max + max * 0.005)
+            return max
         }
         return 0
     }
@@ -105,6 +106,9 @@ public struct MultiLineChartView: View {
         self.curvedLines = curvedLines
         self.lineWidth = lineWidth
         self.opacity = opacity
+        let min = abs(globalMin(0))
+        self.zeros = [Double](repeating: min, count: self.data[0].onlyPoints().count)
+        print(zeros?.description)
     }
     
     public var body: some View {
@@ -169,7 +173,7 @@ public struct MultiLineChartView: View {
                                 }
                             }
                             if displayZero ?? false {
-                                Line(data: ChartData(points: [Double](repeating: abs(globalMin(0)), count: self.data[0].onlyPoints().count) ),
+                                Line(data: ChartData(points: zeros ?? [5]),
                                      frame: .constant(geometry.frame(in: .local)),
                                      touchLocation: self.$touchLocation,
                                      showIndicator: self.$showIndicatorDot,
