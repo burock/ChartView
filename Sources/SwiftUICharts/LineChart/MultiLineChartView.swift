@@ -175,7 +175,7 @@ public struct MultiLineChartView: View {
                                      frame: .constant(geometry.frame(in: .local)),
                                      touchLocation: self.$touchLocation,
                                      showIndicator: self.$showIndicatorDot,
-                                     minDataValue: .constant(0),
+                                     minDataValue: .constant(self.globalMin(0)),
                                      maxDataValue: .constant(self.globalMax(0)),
                                      showBackground: false,
                                      fillGradient: fillGradient,
@@ -187,7 +187,7 @@ public struct MultiLineChartView: View {
                         }
                     }
                 }
-                .frame(width: frame.width, height: frame.height + 30)
+                .frame(width: frame.width, height: frame.height + 80)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .offset(x: 0, y: 0)
                 
